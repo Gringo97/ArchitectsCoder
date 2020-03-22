@@ -2,11 +2,9 @@ package oscar.delafuente.arichitectcoders.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.karumi.dexter.Dexter
@@ -26,7 +24,9 @@ class MainActivity : CoroutineScopeActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val adapter = MoviesAdapter {
-            applicationContext.toast("Open the detail activity")
+        startActivity<DetailActivity> {
+            putExtra(DetailActivity.MOVIE, it)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
