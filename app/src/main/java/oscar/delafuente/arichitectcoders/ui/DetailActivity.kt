@@ -1,8 +1,8 @@
 package oscar.delafuente.arichitectcoders.ui
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import kotlinx.android.synthetic.main.activity_detail.*
