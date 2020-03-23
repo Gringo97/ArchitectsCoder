@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.ui
+package oscar.delafuente.arichitectcoders.ui.detail
 
 import android.content.Context
 import android.util.AttributeSet

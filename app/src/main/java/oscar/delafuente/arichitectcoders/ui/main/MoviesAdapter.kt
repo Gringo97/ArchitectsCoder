@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.ui
+package oscar.delafuente.arichitectcoders.ui.main
 
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.view_movie.view.*
 import oscar.delafuente.arichitectcoders.R
 import oscar.delafuente.arichitectcoders.model.Movie
+import oscar.delafuente.arichitectcoders.ui.common.inflate
+import oscar.delafuente.arichitectcoders.ui.common.loadUrl
 import kotlin.properties.Delegates
 
 class MoviesAdapter(private val listener: (Movie) -> Unit) :
@@ -28,7 +30,9 @@ class MoviesAdapter(private val listener: (Movie) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_movie, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int = movies.size

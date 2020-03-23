@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.ui
+package oscar.delafuente.arichitectcoders.ui.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_detail.*
 import oscar.delafuente.arichitectcoders.R
 import oscar.delafuente.arichitectcoders.model.Movie
+import oscar.delafuente.arichitectcoders.ui.common.loadUrl
 
 class DetailActivity : AppCompatActivity() {
 
