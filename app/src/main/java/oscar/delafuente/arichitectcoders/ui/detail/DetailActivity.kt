@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_detail.*
 import oscar.delafuente.arichitectcoders.R
 import oscar.delafuente.arichitectcoders.model.Movie
+import oscar.delafuente.arichitectcoders.ui.common.getViewModel
 import oscar.delafuente.arichitectcoders.ui.common.loadUrl
 
 
@@ -27,10 +28,7 @@ class DetailActivity : AppCompatActivity() {
         val movie: Movie = intent.getParcelableExtra(MOVIE)
             ?: throw (IllegalStateException("Movie not found"))
 
-        viewModel = ViewModelProvider(
-            this,
-            DetailViewModelFactory(movie)
-        ).get(DetailViewModel::class.java)
+        viewModel = getViewModel { DetailViewModel(movie) }
 
         viewModel.model.observe(this, Observer(::updateUi))
     }
