@@ -3,45 +3,44 @@ package oscar.delafuente.arichitectcoders.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import oscar.delafuente.arichitectcoders.R
 import oscar.delafuente.arichitectcoders.model.Movie
 import oscar.delafuente.arichitectcoders.model.MoviesRepository
 import oscar.delafuente.arichitectcoders.ui.common.startActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
+import oscar.delafuente.arichitectcoders.ui.main.MainViewModel.*
 
-class MainActivity : AppCompatActivity(), MainPresenter.View {
+class MainActivity : AppCompatActivity() {
 
-    private val presenter by lazy { MainPresenter(MoviesRepository(this)) }
-    private val adapter by lazy { MoviesAdapter(presenter::onMovieClicked) }
+    private lateinit var viewModel: MainViewModel
+    private lateinit var adapter: MoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        presenter.onCreate(this)
+
+        viewModel = ViewModelProvider(
+            this,
+            MainViewModelFactory(MoviesRepository(this))
+        ).get(MainViewModel::class.java)
+
+        adapter = MoviesAdapter(viewModel::onMovieClicked)
         recycler.adapter = adapter
+        viewModel.model.observe(this, Observer(::updateUi))
     }
 
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
-    }
+    private fun updateUi(model: UiModel) {
 
-    override fun showProgress() {
-        progress.visibility = View.VISIBLE
-    }
+        progress.visibility = if (model is UiModel.Loading) View.VISIBLE else View.GONE
 
-    override fun hideProgress() {
-        progress.visibility = View.GONE
-    }
-
-    override fun updateData(movies: List<Movie>) {
-        adapter.movies = movies
-    }
-
-    override fun navigateTo(movie: Movie) {
-        startActivity<DetailActivity> {
-            putExtra(DetailActivity.MOVIE, movie)
+        when (model) {
+            is UiModel.Content -> adapter.movies = model.movies
+            is UiModel.Navigation -> startActivity<DetailActivity> {
+                putExtra(DetailActivity.MOVIE, model.movie)
+            }
         }
     }
 }
