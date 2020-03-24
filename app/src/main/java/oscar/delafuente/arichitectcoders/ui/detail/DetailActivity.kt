@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import oscar.delafuente.arichitectcoders.R
 import oscar.delafuente.arichitectcoders.model.Movie
 import oscar.delafuente.arichitectcoders.ui.common.loadUrl
-import oscar.delafuente.arichitectcoders.ui.main.MainViewModel
 
 
 class DetailActivity : AppCompatActivity() {

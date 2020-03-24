@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import oscar.delafuente.arichitectcoders.R
-import oscar.delafuente.arichitectcoders.model.Movie
 import oscar.delafuente.arichitectcoders.model.MoviesRepository
+import oscar.delafuente.arichitectcoders.ui.common.getViewModel
 import oscar.delafuente.arichitectcoders.ui.common.startActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
-import oscar.delafuente.arichitectcoders.ui.main.MainViewModel.*
+import oscar.delafuente.arichitectcoders.ui.main.MainViewModel.UiModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,10 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(
-            this,
-            MainViewModelFactory(MoviesRepository(this))
-        ).get(MainViewModel::class.java)
+        viewModel = getViewModel { MainViewModel(MoviesRepository(this)) }
 
         adapter = MoviesAdapter(viewModel::onMovieClicked)
         recycler.adapter = adapter

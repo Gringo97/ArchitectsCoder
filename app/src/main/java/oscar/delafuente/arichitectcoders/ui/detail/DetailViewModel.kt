@@ -3,7 +3,6 @@ package oscar.delafuente.arichitectcoders.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import oscar.delafuente.arichitectcoders.model.Movie
 
 class DetailViewModel(private val movie: Movie) : ViewModel() {
@@ -16,10 +15,4 @@ class DetailViewModel(private val movie: Movie) : ViewModel() {
             if (_model.value == null) _model.value = UiModel(movie)
             return _model
         }
-}
-
-class DetailViewModelFactory(private val movie: Movie) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        DetailViewModel(movie) as T
 }
