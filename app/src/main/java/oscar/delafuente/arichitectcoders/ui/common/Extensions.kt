@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.bumptech.glide.Glide
+import oscar.delafuente.arichitectcoders.MoviesApp
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -37,3 +38,6 @@ inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline fac
 
     return ViewModelProvider(this, vmFactory).get()
 }
+
+val Context.app: MoviesApp
+    get() = applicationContext as MoviesApp

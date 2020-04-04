@@ -2,14 +2,12 @@ package oscar.delafuente.arichitectcoders.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.launch
-import oscar.delafuente.arichitectcoders.model.Movie
-import oscar.delafuente.arichitectcoders.model.MoviesRepository
-import oscar.delafuente.arichitectcoders.ui.common.Scope
+import oscar.delafuente.arichitectcoders.model.database.Movie
+import oscar.delafuente.arichitectcoders.model.server.MoviesRepository
+import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 
-class MainViewModel(private val moviesRepository: MoviesRepository) : ViewModel(),
-    Scope by Scope.Impl() {
+class MainViewModel(private val moviesRepository: MoviesRepository) : ScopedViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -37,7 +35,7 @@ class MainViewModel(private val moviesRepository: MoviesRepository) : ViewModel(
     fun onCoarsePermissionRequested() {
         launch {
             _model.value = UiModel.Loading
-            _model.value = UiModel.Content(moviesRepository.findPopularMovies().results)
+            _model.value = UiModel.Content(moviesRepository.findPopularMovies())
         }
     }
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.view_movie.view.*
 import oscar.delafuente.arichitectcoders.R
-import oscar.delafuente.arichitectcoders.model.Movie
+import oscar.delafuente.arichitectcoders.model.database.Movie
 import oscar.delafuente.arichitectcoders.ui.common.inflate
 import oscar.delafuente.arichitectcoders.ui.common.loadUrl
 import kotlin.properties.Delegates
