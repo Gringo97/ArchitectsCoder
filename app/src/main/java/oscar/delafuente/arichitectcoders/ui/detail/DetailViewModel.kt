@@ -35,13 +35,12 @@ class DetailViewModel(private val movieId: Int, private val moviesRepository: Mo
         }
     }
 
-    class UiModel(val movie: Movie)
-
 
     fun onFavoriteClicked() = MainScope().launch {
         movie.value?.let {
             val updatedMovie = it.copy(favorite = !it.favorite)
             _movie.value = updatedMovie
+            updateUi()
             moviesRepository.update(updatedMovie)
         }
     }
@@ -50,7 +49,7 @@ class DetailViewModel(private val movieId: Int, private val moviesRepository: Mo
         movie.value?.run {
             _title.value = title
             _overview.value = overview
-            _url.value = "https://image.tmdb.org/t/p/w780$backdropPath"
+            _url.value = backdropPath
             _favorite.value = favorite
         }
     }

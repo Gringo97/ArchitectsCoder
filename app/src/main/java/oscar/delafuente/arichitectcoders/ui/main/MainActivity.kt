@@ -2,18 +2,17 @@ package oscar.delafuente.arichitectcoders.ui.main
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.databinding.DataBindingUtil
 import oscar.delafuente.arichitectcoders.PermissionRequester
 import oscar.delafuente.arichitectcoders.R
+import oscar.delafuente.arichitectcoders.databinding.ActivityMainBinding
 import oscar.delafuente.arichitectcoders.model.server.MoviesRepository
+import oscar.delafuente.arichitectcoders.ui.common.EventObserver
 import oscar.delafuente.arichitectcoders.ui.common.app
 import oscar.delafuente.arichitectcoders.ui.common.getViewModel
 import oscar.delafuente.arichitectcoders.ui.common.startActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
-import oscar.delafuente.arichitectcoders.ui.main.MainViewModel.UiModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,32 +23,33 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         viewModel = getViewModel {
             MainViewModel(
                 MoviesRepository(app)
             )
         }
+        
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
 
         adapter = MoviesAdapter(viewModel::onMovieClicked)
-        recycler.adapter = adapter
-        viewModel.model.observe(this, Observer(::updateUi))
-    }
+        binding.recycler.adapter = adapter
 
-    private fun updateUi(model: UiModel) {
-
-        progress.visibility = if (model is UiModel.Loading) View.VISIBLE else View.GONE
-
-        when (model) {
-            is UiModel.Content -> adapter.movies = model.movies
-            is UiModel.Navigation -> startActivity<DetailActivity> {
-                putExtra(DetailActivity.MOVIE, model.movie.id)
+        viewModel.navigateToMovie.observe(this, EventObserver { id ->
+            startActivity<DetailActivity> {
+                putExtra(DetailActivity.MOVIE, id)
             }
-            UiModel.RequestLocationPermission -> coarsePermissionRequester.request {
+        })
+
+        viewModel.requestLocationPermission.observe(this, EventObserver {
+            coarsePermissionRequester.request {
                 viewModel.onCoarsePermissionRequested()
             }
-
-        }
+        })
     }
+
 }
