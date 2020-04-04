@@ -2,7 +2,6 @@ package oscar.delafuente.arichitectcoders.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import oscar.delafuente.arichitectcoders.model.database.Movie
@@ -13,25 +12,46 @@ import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 class DetailViewModel(private val movieId: Int, private val moviesRepository: MoviesRepository) :
     ScopedViewModel() {
 
-    class UiModel(val movie: Movie)
 
-    private val _model = MutableLiveData<UiModel>()
-    val model: LiveData<UiModel>
-        get() {
-            if (_model.value == null) findMovie()
+    private val _movie = MutableLiveData<Movie>()
+    val movie: LiveData<Movie> get() = _movie
 
-            return _model
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String> get() = _title
+
+    private val _overview = MutableLiveData<String>()
+    val overview: LiveData<String> get() = _overview
+
+    private val _url = MutableLiveData<String>()
+    val url: LiveData<String> get() = _url
+
+    private val _favorite = MutableLiveData<Boolean>()
+    val favorite: LiveData<Boolean> get() = _favorite
+
+    init {
+        launch {
+            _movie.value = moviesRepository.findById(movieId)
+            updateUi()
         }
-
-    private fun findMovie() = MainScope().launch {
-        _model.value = UiModel(moviesRepository.findById(movieId))
     }
 
+    class UiModel(val movie: Movie)
+
+
     fun onFavoriteClicked() = MainScope().launch {
-        _model.value?.movie?.let {
+        movie.value?.let {
             val updatedMovie = it.copy(favorite = !it.favorite)
-            _model.value = UiModel(updatedMovie)
+            _movie.value = updatedMovie
             moviesRepository.update(updatedMovie)
+        }
+    }
+
+    private fun updateUi() {
+        movie.value?.run {
+            _title.value = title
+            _overview.value = overview
+            _url.value = "https://image.tmdb.org/t/p/w780$backdropPath"
+            _favorite.value = favorite
         }
     }
 }
