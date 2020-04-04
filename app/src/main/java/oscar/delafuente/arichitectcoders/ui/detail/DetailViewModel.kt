@@ -2,17 +2,35 @@ package oscar.delafuente.arichitectcoders.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import oscar.delafuente.arichitectcoders.model.Movie
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import oscar.delafuente.arichitectcoders.model.database.Movie
+import oscar.delafuente.arichitectcoders.model.server.MoviesRepository
+import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 
-class DetailViewModel(private val movie: Movie) : ViewModel() {
+
+class DetailViewModel(private val movieId: Int, private val moviesRepository: MoviesRepository) :
+    ScopedViewModel() {
 
     class UiModel(val movie: Movie)
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
         get() {
-            if (_model.value == null) _model.value = UiModel(movie)
+            if (_model.value == null) findMovie()
+
             return _model
         }
+
+    private fun findMovie() = GlobalScope.launch {
+        _model.value = UiModel(moviesRepository.findById(movieId))
+    }
+
+    fun onFavoriteClicked() = GlobalScope.launch {
+        _model.value?.movie?.let {
+            val updatedMovie = it.copy(favorite = !it.favorite)
+            _model.value = UiModel(updatedMovie)
+            moviesRepository.update(updatedMovie)
+        }
+    }
 }

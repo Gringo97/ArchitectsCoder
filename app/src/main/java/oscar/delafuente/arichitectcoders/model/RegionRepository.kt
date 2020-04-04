@@ -1,7 +1,6 @@
 package oscar.delafuente.arichitectcoders.model
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.app.Activity
 import android.app.Application
 import android.location.Geocoder
 import android.location.Location

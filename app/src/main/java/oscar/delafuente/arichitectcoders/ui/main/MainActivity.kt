@@ -8,7 +8,8 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
 import oscar.delafuente.arichitectcoders.PermissionRequester
 import oscar.delafuente.arichitectcoders.R
-import oscar.delafuente.arichitectcoders.model.MoviesRepository
+import oscar.delafuente.arichitectcoders.model.server.MoviesRepository
+import oscar.delafuente.arichitectcoders.ui.common.app
 import oscar.delafuente.arichitectcoders.ui.common.getViewModel
 import oscar.delafuente.arichitectcoders.ui.common.startActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
@@ -25,7 +26,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = getViewModel { MainViewModel(MoviesRepository(application)) }
+        viewModel = getViewModel {
+            MainViewModel(
+                MoviesRepository(app)
+            )
+        }
 
         adapter = MoviesAdapter(viewModel::onMovieClicked)
         recycler.adapter = adapter
@@ -39,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         when (model) {
             is UiModel.Content -> adapter.movies = model.movies
             is UiModel.Navigation -> startActivity<DetailActivity> {
-                putExtra(DetailActivity.MOVIE, model.movie)
+                putExtra(DetailActivity.MOVIE, model.movie.id)
             }
             UiModel.RequestLocationPermission -> coarsePermissionRequester.request {
                 viewModel.onCoarsePermissionRequested()

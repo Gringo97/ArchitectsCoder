@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.model
+package oscar.delafuente.arichitectcoders.model.server
 
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
-import oscar.delafuente.arichitectcoders.model.Movie
+import oscar.delafuente.arichitectcoders.model.database.Movie
 
 class MovieDetailInfoView @JvmOverloads constructor(
     context: Context,

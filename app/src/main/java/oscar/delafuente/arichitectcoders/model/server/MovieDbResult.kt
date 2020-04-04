@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.model
+package oscar.delafuente.arichitectcoders.model.server
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
