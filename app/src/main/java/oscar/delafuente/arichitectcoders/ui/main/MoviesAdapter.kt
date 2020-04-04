@@ -1,52 +1,31 @@
 package oscar.delafuente.arichitectcoders.ui.main
 
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.view_movie.view.*
 import oscar.delafuente.arichitectcoders.R
+import oscar.delafuente.arichitectcoders.databinding.ViewMovieBinding
 import oscar.delafuente.arichitectcoders.model.database.Movie
-import oscar.delafuente.arichitectcoders.ui.common.inflate
-import oscar.delafuente.arichitectcoders.ui.common.loadUrl
-import kotlin.properties.Delegates
+import oscar.delafuente.arichitectcoders.ui.common.basicDiffUtil
+import oscar.delafuente.arichitectcoders.ui.common.bindingInflate
 
 class MoviesAdapter(private val listener: (Movie) -> Unit) :
     RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
 
-    var movies: List<Movie> by Delegates.observable(emptyList()) { _, old, new ->
-        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                old[oldItemPosition].id == new[newItemPosition].id
+    var movies: List<Movie> by basicDiffUtil(
+        emptyList(),
+        areItemsTheSame = { old, new -> old.id == new.id }
+    )
 
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                old[oldItemPosition] == new[newItemPosition]
-
-            override fun getOldListSize(): Int = old.size
-
-            override fun getNewListSize(): Int = new.size
-        }).dispatchUpdatesTo(this)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = parent.inflate(R.layout.view_movie, false)
-        return ViewHolder(
-            view
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder(parent.bindingInflate(R.layout.view_movie, false))
 
     override fun getItemCount(): Int = movies.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie = movies[position]
-        holder.bind(movie)
+        holder.dataBinding.movie = movie
         holder.itemView.setOnClickListener { listener(movie) }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(movie: Movie) {
-            itemView.movieTitle.text = movie.title
-            itemView.movieCover.loadUrl("https://image.tmdb.org/t/p/w185/${movie.posterPath}")
-        }
-    }
+    class ViewHolder(val dataBinding: ViewMovieBinding) : RecyclerView.ViewHolder(dataBinding.root)
 }
