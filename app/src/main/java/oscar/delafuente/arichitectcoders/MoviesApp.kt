@@ -1,20 +1,19 @@
 package oscar.delafuente.arichitectcoders
 
 import android.app.Application
-import androidx.room.Room
-import oscar.delafuente.arichitectcoders.data.database.MovieDatabase
+import oscar.delafuente.arichitectcoders.di.DaggerMyMoviesComponent
+import oscar.delafuente.arichitectcoders.di.MyMoviesComponent
 
 class MoviesApp : Application() {
 
-    lateinit var db: MovieDatabase
+    lateinit var component: MyMoviesComponent
         private set
 
     override fun onCreate() {
         super.onCreate()
 
-        db = Room.databaseBuilder(
-            this,
-            MovieDatabase::class.java, "movie-db"
-        ).build()
+        component = DaggerMyMoviesComponent
+            .factory()
+            .create(this)
     }
 }
