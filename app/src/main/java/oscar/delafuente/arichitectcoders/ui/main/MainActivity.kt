@@ -5,10 +5,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.oscardelafuente.data.repository.MoviesRepository
+import com.oscardelafuente.data.repository.RegionRepository
+import com.oscardelafuente.usecases.GetPopularMovies
 import kotlinx.android.synthetic.main.activity_main.*
-import oscar.delafuente.arichitectcoders.PermissionRequester
+import oscar.delafuente.arichitectcoders.ui.common.PermissionRequester
 import oscar.delafuente.arichitectcoders.R
-import oscar.delafuente.arichitectcoders.model.server.MoviesRepository
+import oscar.delafuente.arichitectcoders.data.AndroidPermissionChecker
+import oscar.delafuente.arichitectcoders.data.PlayServicesLocationDataSource
+import oscar.delafuente.arichitectcoders.data.database.RoomDataSource
+import oscar.delafuente.arichitectcoders.data.server.TheMovieDbDataSource
 import oscar.delafuente.arichitectcoders.ui.common.app
 import oscar.delafuente.arichitectcoders.ui.common.getViewModel
 import oscar.delafuente.arichitectcoders.ui.common.startActivity
@@ -19,7 +25,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: MoviesAdapter
-    private val coarsePermissionRequester = PermissionRequester(this, ACCESS_COARSE_LOCATION)
+    private val coarsePermissionRequester =
+        PermissionRequester(
+            this,
+            ACCESS_COARSE_LOCATION
+        )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +38,20 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = getViewModel {
             MainViewModel(
-                MoviesRepository(app)
+                GetPopularMovies(
+                    MoviesRepository(
+                        RoomDataSource(app.db),
+                        TheMovieDbDataSource(),
+                        RegionRepository(
+                            PlayServicesLocationDataSource(app),
+                            AndroidPermissionChecker(app)
+                        ),
+                        app.getString(R.string.api_key)
+                    )
+                )
             )
         }
+
 
         adapter = MoviesAdapter(viewModel::onMovieClicked)
         recycler.adapter = adapter

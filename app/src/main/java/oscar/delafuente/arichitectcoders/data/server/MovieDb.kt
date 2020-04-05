@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.model.server
+package oscar.delafuente.arichitectcoders.data.server
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

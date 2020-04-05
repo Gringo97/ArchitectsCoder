@@ -2,7 +2,7 @@ package oscar.delafuente.arichitectcoders
 
 import android.app.Application
 import androidx.room.Room
-import oscar.delafuente.arichitectcoders.model.database.MovieDatabase
+import oscar.delafuente.arichitectcoders.data.database.MovieDatabase
 
 class MoviesApp : Application() {
 

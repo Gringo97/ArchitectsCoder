@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders.model.database
+package oscar.delafuente.arichitectcoders.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

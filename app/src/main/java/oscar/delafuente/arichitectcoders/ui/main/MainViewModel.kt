@@ -2,12 +2,13 @@ package oscar.delafuente.arichitectcoders.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.oscardelafuente.domain.Movie
+import com.oscardelafuente.usecases.GetPopularMovies
 import kotlinx.coroutines.launch
-import oscar.delafuente.arichitectcoders.model.database.Movie
-import oscar.delafuente.arichitectcoders.model.server.MoviesRepository
+
 import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 
-class MainViewModel(private val moviesRepository: MoviesRepository) : ScopedViewModel() {
+class MainViewModel(private val getPopularMovies: GetPopularMovies) : ScopedViewModel() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -35,7 +36,7 @@ class MainViewModel(private val moviesRepository: MoviesRepository) : ScopedView
     fun onCoarsePermissionRequested() {
         launch {
             _model.value = UiModel.Loading
-            _model.value = UiModel.Content(moviesRepository.findPopularMovies())
+            _model.value = UiModel.Content(getPopularMovies.invoke())
         }
     }
 

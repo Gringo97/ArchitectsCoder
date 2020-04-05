@@ -4,9 +4,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.oscardelafuente.domain.Movie
 import kotlinx.android.synthetic.main.view_movie.view.*
 import oscar.delafuente.arichitectcoders.R
-import oscar.delafuente.arichitectcoders.model.database.Movie
+
 import oscar.delafuente.arichitectcoders.ui.common.inflate
 import oscar.delafuente.arichitectcoders.ui.common.loadUrl
 import kotlin.properties.Delegates

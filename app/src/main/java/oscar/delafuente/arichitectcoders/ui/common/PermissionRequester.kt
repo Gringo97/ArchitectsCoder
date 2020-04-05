@@ -1,4 +1,4 @@
-package oscar.delafuente.arichitectcoders
+package oscar.delafuente.arichitectcoders.ui.common
 
 import android.app.Activity
 import com.karumi.dexter.Dexter
