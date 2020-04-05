@@ -3,16 +3,18 @@ package oscar.delafuente.arichitectcoders.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import oscar.delafuente.arichitectcoders.ui.detail.DetailViewModel
-import oscar.delafuente.arichitectcoders.ui.main.MainViewModel
+import oscar.delafuente.arichitectcoders.ui.detail.DetailActivityComponent
+import oscar.delafuente.arichitectcoders.ui.detail.DetailActivityModule
+import oscar.delafuente.arichitectcoders.ui.main.MainActivityComponent
+import oscar.delafuente.arichitectcoders.ui.main.MainActivityModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, DataModule::class, UseCaseModule::class, ViewModelsModule::class])
+@Component(modules = [AppModule::class, DataModule::class])
 interface MyMoviesComponent {
 
-    val mainViewModel: MainViewModel
-    val detaiViewModel: DetailViewModel
+    fun plus(module: MainActivityModule): MainActivityComponent
+    fun plus(module: DetailActivityModule): DetailActivityComponent
 
     @Component.Factory
     interface Factory {
