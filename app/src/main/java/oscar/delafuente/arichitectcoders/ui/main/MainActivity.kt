@@ -6,10 +6,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.viewmodel.scope.viewModel
 import oscar.delafuente.arichitectcoders.R
 import oscar.delafuente.arichitectcoders.ui.common.PermissionRequester
-import oscar.delafuente.arichitectcoders.ui.common.app
-import oscar.delafuente.arichitectcoders.ui.common.getViewModel
 import oscar.delafuente.arichitectcoders.ui.common.startActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
 import oscar.delafuente.arichitectcoders.ui.main.MainViewModel.UiModel
@@ -23,14 +23,11 @@ class MainActivity : AppCompatActivity() {
             ACCESS_COARSE_LOCATION
         )
 
-    private lateinit var component: MainActivityComponent
-    private val viewModel: MainViewModel by lazy { getViewModel { component.mainViewModel } }
+    private val viewModel: MainViewModel by lifecycleScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        component = app.component.plus(MainActivityModule())
 
         adapter = MoviesAdapter(viewModel::onMovieClicked)
         recycler.adapter = adapter
