@@ -24,6 +24,7 @@ import oscar.delafuente.arichitectcoders.data.AndroidPermissionChecker
 import oscar.delafuente.arichitectcoders.data.PlayServicesLocationDataSource
 import oscar.delafuente.arichitectcoders.data.database.MovieDatabase
 import oscar.delafuente.arichitectcoders.data.database.RoomDataSource
+import oscar.delafuente.arichitectcoders.data.server.TheMovieDb
 import oscar.delafuente.arichitectcoders.data.server.TheMovieDbDataSource
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailViewModel
@@ -42,10 +43,13 @@ private val appModule = module {
     single(named("apiKey")) { androidApplication().getString(R.string.api_key) }
     single { MovieDatabase.build(get()) }
     factory<LocalDataSource> { RoomDataSource(get()) }
-    factory<RemoteDataSource> { TheMovieDbDataSource() }
+    factory<RemoteDataSource> { TheMovieDbDataSource(get()) }
     factory<LocationDataSource> { PlayServicesLocationDataSource(get()) }
     factory<PermissionChecker> { AndroidPermissionChecker(get()) }
     single<CoroutineDispatcher> { Dispatchers.Main }
+    single(named("baseUrl")) { "https://api.themoviedb.org/3/" }
+    single { TheMovieDb(get(named("baseUrl"))) }
+
 }
 
 val dataModule = module {
@@ -55,12 +59,12 @@ val dataModule = module {
 
 private val scopesModule = module {
     scope(named<MainActivity>()) {
-        viewModel { MainViewModel(get(),get()) }
+        viewModel { MainViewModel(get(), get()) }
         scoped { GetPopularMovies(get()) }
     }
 
     scope(named<DetailActivity>()) {
-        viewModel { (id: Int) -> DetailViewModel(id, get(), get(), get())}
+        viewModel { (id: Int) -> DetailViewModel(id, get(), get(), get()) }
         scoped { FindMovieById(get()) }
         scoped { ToggleMovieFavorite(get()) }
     }
