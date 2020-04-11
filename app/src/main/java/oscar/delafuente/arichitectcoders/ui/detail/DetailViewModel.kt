@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.oscardelafuente.domain.Movie
 import com.oscardelafuente.usecases.FindMovieById
 import com.oscardelafuente.usecases.ToggleMovieFavorite
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 
@@ -12,17 +13,17 @@ import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 class DetailViewModel(
     private val movieId: Int,
     private val findMovieById: FindMovieById,
-    private val toggleMovieFavorite: ToggleMovieFavorite
+    private val toggleMovieFavorite: ToggleMovieFavorite,
+    override val uiDispatcher: CoroutineDispatcher
 ) :
-    ScopedViewModel() {
+    ScopedViewModel(uiDispatcher) {
 
-    class UiModel(val movie: Movie)
+    data class UiModel(val movie: Movie)
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
         get() {
             if (_model.value == null) findMovie()
-
             return _model
         }
 

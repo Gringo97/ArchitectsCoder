@@ -10,6 +10,8 @@ import com.oscardelafuente.data.source.RemoteDataSource
 import com.oscardelafuente.usecases.FindMovieById
 import com.oscardelafuente.usecases.GetPopularMovies
 import com.oscardelafuente.usecases.ToggleMovieFavorite
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -22,6 +24,7 @@ import oscar.delafuente.arichitectcoders.data.AndroidPermissionChecker
 import oscar.delafuente.arichitectcoders.data.PlayServicesLocationDataSource
 import oscar.delafuente.arichitectcoders.data.database.MovieDatabase
 import oscar.delafuente.arichitectcoders.data.database.RoomDataSource
+import oscar.delafuente.arichitectcoders.data.server.TheMovieDb
 import oscar.delafuente.arichitectcoders.data.server.TheMovieDbDataSource
 import oscar.delafuente.arichitectcoders.ui.detail.DetailActivity
 import oscar.delafuente.arichitectcoders.ui.detail.DetailViewModel
@@ -40,24 +43,28 @@ private val appModule = module {
     single(named("apiKey")) { androidApplication().getString(R.string.api_key) }
     single { MovieDatabase.build(get()) }
     factory<LocalDataSource> { RoomDataSource(get()) }
-    factory<RemoteDataSource> { TheMovieDbDataSource() }
+    factory<RemoteDataSource> { TheMovieDbDataSource(get()) }
     factory<LocationDataSource> { PlayServicesLocationDataSource(get()) }
     factory<PermissionChecker> { AndroidPermissionChecker(get()) }
+    single<CoroutineDispatcher> { Dispatchers.Main }
+    single(named("baseUrl")) { "https://api.themoviedb.org/3/" }
+    single { TheMovieDb(get(named("baseUrl"))) }
+
 }
 
-private val dataModule = module {
+val dataModule = module {
     factory { RegionRepository(get(), get()) }
     factory { MoviesRepository(get(), get(), get(), get(named("apiKey"))) }
 }
 
 private val scopesModule = module {
     scope(named<MainActivity>()) {
-        viewModel { MainViewModel(get()) }
+        viewModel { MainViewModel(get(), get()) }
         scoped { GetPopularMovies(get()) }
     }
 
     scope(named<DetailActivity>()) {
-        viewModel { (id: Int) -> DetailViewModel(id, get(), get()) }
+        viewModel { (id: Int) -> DetailViewModel(id, get(), get(), get()) }
         scoped { FindMovieById(get()) }
         scoped { ToggleMovieFavorite(get()) }
     }
