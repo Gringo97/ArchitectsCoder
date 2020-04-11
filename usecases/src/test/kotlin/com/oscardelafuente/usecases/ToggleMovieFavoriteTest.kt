@@ -1,9 +1,8 @@
 package com.oscardelafuente.usecases
 
-import org.junit.Assert.*
-
 
 import com.nhaarman.mockitokotlin2.verify
+import com.oscardelafuente.testShared.mockedMovie
 import com.oscardelafuente.data.repository.MoviesRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertFalse

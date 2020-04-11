@@ -4,11 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.oscardelafuente.domain.Movie
 import com.oscardelafuente.usecases.GetPopularMovies
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 import oscar.delafuente.arichitectcoders.ui.common.ScopedViewModel
 
-class MainViewModel(private val getPopularMovies: GetPopularMovies) : ScopedViewModel() {
+class MainViewModel(
+    private val getPopularMovies: GetPopularMovies,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModel(uiDispatcher) {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -19,10 +23,9 @@ class MainViewModel(private val getPopularMovies: GetPopularMovies) : ScopedView
 
     sealed class UiModel {
         object Loading : UiModel()
-        class Content(val movies: List<Movie>) : UiModel()
-        class Navigation(val movie: Movie) : UiModel()
+        data class Content(val movies: List<Movie>) : UiModel()
+        data class Navigation(val movie: Movie) : UiModel()
         object RequestLocationPermission : UiModel()
-
     }
 
     init {

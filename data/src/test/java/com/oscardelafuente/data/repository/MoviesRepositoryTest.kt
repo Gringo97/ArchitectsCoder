@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.oscardelafuente.data.source.LocalDataSource
 import com.oscardelafuente.data.source.RemoteDataSource
-import com.oscardelafuente.domain.Movie
+import com.oscardelafuente.testShared.mockedMovie
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -91,17 +91,5 @@ class MoviesRepositoryTest {
         }
     }
 
-    private val mockedMovie = Movie(
-        0,
-        "Title",
-        "Overview",
-        "01/01/2025",
-        "",
-        "",
-        "EN",
-        "Title",
-        5.0,
-        5.1,
-        false
-    )
+
 }

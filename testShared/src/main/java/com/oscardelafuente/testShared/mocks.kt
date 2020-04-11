@@ -1,8 +1,8 @@
-package com.oscardelafuente.usecases
+package com.oscardelafuente.testShared
 
 import com.oscardelafuente.domain.Movie
 
-internal val mockedMovie = Movie(
+val mockedMovie = Movie(
     0,
     "Title",
     "Overview",

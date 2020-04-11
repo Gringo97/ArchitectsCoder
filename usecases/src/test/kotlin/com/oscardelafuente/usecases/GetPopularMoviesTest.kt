@@ -2,6 +2,7 @@ package com.oscardelafuente.usecases
 
 
 import com.nhaarman.mockitokotlin2.whenever
+import com.oscardelafuente.testShared.mockedMovie
 import com.oscardelafuente.data.repository.MoviesRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
