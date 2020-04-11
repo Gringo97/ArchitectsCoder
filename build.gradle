@@ -57,6 +57,7 @@ allprojects {
                 junit        : 'junit:junit:4.12',
                 mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0",
                 mockitoInline: "org.mockito:mockito-inline:2.28.2",
+                koinTest     : 'org.koin:koin-test:2.1.1',
                 testShared: project(':testShared')
 
         ]
